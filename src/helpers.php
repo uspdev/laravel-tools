@@ -1,51 +1,51 @@
 <?php
 
-function readComposer()
-{
-    // dd(base_path('composer.json'));
-    $composer = json_decode(file_get_contents(base_path('composer.json')));
-    return $composer;
-}
-
-function fetchFromRemote()
-{
-    $name = readComposer()->name;
-    $userAgent = 'Uspdev versioning agent';
-
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, "https://apis.github.com/repos/$name/releases/latest");
-    curl_setopt($ch, CURLOPT_HEADER, 0);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_USERAGENT, $userAgent);
-
-    $res = curl_exec($ch);
-    curl_close($ch);
-
-    if (json_decode($res)) {
-        file_put_contents(storage_path('app/latest-release.json'), $res);
-    }
-
-}
-
-function get_latest_release()
-{
-    fetchFromRemote();
-    $latest = file_get_contents(storage_path('app/latest-release.json'));
-    $latest = json_decode($latest);
-
-    echo $latest->tag_name, PHP_EOL;
-    echo $latest->published_at, PHP_EOL;
-
-    // var_dump($latest);
-
-    /* not found message
-{
-"message": "Not Found",
-"documentation_url": "https://docs.github.com/rest/reference/repos#get-the-latest-release"
-}
+/**
+ * Turn all URLs in clickable links.
+ *
+ * https://gist.github.com/jasny/2000705
+ * visitado em 1/10/2021
+ * 
+ * @param string $value
+ * @param array  $protocols  http/https, ftp, mail, twitter
+ * @param array  $attributes
+ * @return string
  */
+if (!function_exists('linkify')) {
+
+    function linkify($value, $protocols = array('http', 'mail'), array $attributes = ['target' => '_BLANK'])
+    {
+        // Link attributes
+        $attr = '';
+        foreach ($attributes as $key => $val) {
+            $attr .= ' ' . $key . '="' . htmlentities($val) . '"';
+        }
+
+        $links = array();
+
+        // Extract existing links and tags
+        $value = preg_replace_callback('~(<a .*?>.*?</a>|<.*?>)~i', function ($match) use (&$links) {return '<' . array_push($links, $match[1]) . '>';}, $value);
+
+        // Extract text links for each protocol
+        foreach ((array) $protocols as $protocol) {
+            switch ($protocol) {
+                case 'http':
+                case 'https':$value = preg_replace_callback('~(?:(https?)://([^\s<]+)|(www\.[^\s<]+?\.[^\s<]+))(?<![\.,:])~i', function ($match) use ($protocol, &$links, $attr) {if ($match[1]) {
+                        $protocol = $match[1];
+                    }
+                        $link = $match[2] ?: $match[3];return '<' . array_push($links, "<a $attr href=\"$protocol://$link\">$link</a>") . '>';}, $value);
+                    break;
+                case 'mail':$value = preg_replace_callback('~([^\s<]+?@[^\s<]+?\.[^\s<]+)(?<![\.,:])~', function ($match) use (&$links, $attr) {return '<' . array_push($links, "<a $attr href=\"mailto:{$match[1]}\">{$match[1]}</a>") . '>';}, $value);
+                    break;
+                case 'twitter':$value = preg_replace_callback('~(?<!\w)[@#](\w++)~', function ($match) use (&$links, $attr) {return '<' . array_push($links, "<a $attr href=\"https://twitter.com/" . ($match[0][0] == '@' ? '' : 'search/%23') . $match[1] . "\">{$match[0]}</a>") . '>';}, $value);
+                    break;
+                default:$value = preg_replace_callback('~' . preg_quote($protocol, '~') . '://([^\s<]+?)(?<![\.,:])~i', function ($match) use ($protocol, &$links, $attr) {return '<' . array_push($links, "<a $attr href=\"$protocol://{$match[1]}\">{$match[1]}</a>") . '>';}, $value);
+                    break;
+            }
+        }
+
+        // Insert all link
+        return preg_replace_callback('/<(\d+)>/', function ($match) use (&$links) {return $links[$match[1] - 1];}, $value);
+    }
 }
 
-# Usage
-# $ get_latest_release "creationix/nvm"
-# v0.31.4
