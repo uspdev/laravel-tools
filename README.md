@@ -5,6 +5,14 @@ Ferramentas e configurações úteis para aplicações laravel no contexto do US
 
     composer require uspdev/laravel-tools
 
+## O que essa biblioteca fornece?
+
+* forcarHttps
+
+### Helpers
+
+* linkify($texto) - procura no texto por urls (ex. `http://github.com`) e transforma em links (`<a href="http://github.com">http://github.com</a>`)
+
 ## Configuração
 
 Exemplo de configuração e uso.
@@ -20,6 +28,3 @@ Exemplo de configuração e uso.
 
 ```
 
-## Helpers
-
-* linkify($texto) - procura no texto por urls (ex. `http://github.com`) e transforma em link (`<a href="http://github.com">http://github.com</a>`)
