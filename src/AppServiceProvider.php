@@ -1,27 +1,26 @@
 <?php
 namespace Uspdev\LaravelTools;
 
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__ . '/../config/config.php', 'LaravelTools');
+        $this->mergeConfigFrom(__DIR__ . '/../config/laravel-tools.php', 'laravel-tools');
     }
 
     public function boot()
     {
-
         $this->configForcarHttps();
         $this->publicarConfig();
-
     }
 
     protected function configForcarHttps()
     {
-        if (config('laravelTools.forcarHttps')) {
-            \URL::forceScheme('https');
+        if (config('laravel-tools.forcarHttps')) {
+            URL::forceScheme('https');
         }
     }
 
@@ -33,7 +32,7 @@ class AppServiceProvider extends ServiceProvider
     protected function publicarConfig()
     {
         if ($this->app->runningInConsole()) {
-            $this->publishes([__DIR__ . '/../config/config.php' => config_path('LaravelTools.php')], 'config');
+            $this->publishes([__DIR__ . '/../config/laravel-tools.php' => config_path('laravel-tools.php')], 'config');
         }
     }
 }

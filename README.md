@@ -11,7 +11,10 @@ Ferramentas e configurações úteis para aplicações laravel no contexto do US
 
 ### Helpers
 
-* linkify($texto) - procura no texto por urls (ex. `http://github.com`) e transforma em links (`<a href="http://github.com">http://github.com</a>`)
+* **linkify($texto)** - procura no texto por urls (ex. `http://github.com`) e transforma em links (`<a href="http://github.com">http://github.com</a>`)
+* **hasReplicado()** - verifica se a biblioteca replicado está instalada
+* **hasUspTheme()** - verifica se a biblioteca laravel-usp-theme está instalada
+* **appVersion()** - mostra a versão da aplicação
 
 ## Configuração
 
@@ -21,10 +24,12 @@ Exemplo de configuração e uso.
 # LARAVEL TOOLS #########################################
 # https://github.com/uspdev/laravel-tools
 
-# Se sua aplicação está atrás de um proxy e se comunica com o proxy por http
-# mas o proxy se comunica com o usuário por https, vc deve forçar o https no laravel
-# default = false
-#LARAVEL_TOOLS_FORCAR_HTTPS = true
+# Se sua aplicação está atrás de um proxy e se comunica com o proxy por http mas o proxy 
+# se comunica com o usuário por https, vc deve forçar o https no laravel (default = false).
+#LARAVEL_TOOLS_FORCAR_HTTPS = false
+
+# Ativa mensagens de debug (default = false)
+#LARAVEL_TOOLS_DEBUG=false
 
 ```
 
