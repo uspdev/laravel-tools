@@ -28,8 +28,8 @@ Exemplo de configuração e uso.
 # se comunica com o usuário por https, vc deve forçar o https no laravel (default = false).
 #LARAVEL_TOOLS_FORCAR_HTTPS=false
 
-# Ativa mensagens de debug (default = false)
-#LARAVEL_TOOLS_DEBUG=false
+# Ativa mensagens de debug (default = app.debug)
+#LARAVEL_TOOLS_DEBUG=
 
 ```
 
