@@ -7,8 +7,12 @@
  */
 if (!function_exists('hasUspTheme')) {
 
-    function hasUspTheme()
+    function hasUspTheme(bool $humanReadable = false)
     {
-        return \class_exists('Uspdev\\UspTheme\\UspTheme') ? true : false;
+        if (\class_exists('Uspdev\\UspTheme\\UspTheme')) {
+            return $humanReadable ? 'true' : true;
+        } else {
+            return $humanReadable ? 'false' : false;
+        }
     }
 }

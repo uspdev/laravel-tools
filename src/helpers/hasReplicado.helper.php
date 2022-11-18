@@ -12,17 +12,17 @@ use Uspdev\Replicado\Replicado;
  */
 if (!function_exists('hasReplicado')) {
 
-    function hasReplicado()
+    function hasReplicado(bool $humanReadable = false)
     {
         // versão 2 possui a classe replicado
         if (\class_exists('Uspdev\\Replicado\\Replicado')) {
-            if (Replicado::test()) {
+            // if (DB::test()) {
                 return 'v2';
-            }
+            // }
         }
         if (\class_exists('Uspdev\\Replicado\\DB')) {
-            return true;
+            return $humanReadable ? 'true' : true;
         }
-        return false;
+        return $humanReadable ? 'false' : false;
     }
 }
