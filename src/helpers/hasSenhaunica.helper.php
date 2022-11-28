@@ -2,16 +2,16 @@
 
 use Composer\InstalledVersions;
 /**
- * Verifica se a biblioteca larave-usp-theme está instalada
+ * Verifica se a biblioteca senhaunica-socialite está instalada
  *
  * @return boolean
  * @author Masaki K Neto, em 29/11/2021
  */
-if (!function_exists('hasUspTheme')) {
+if (!function_exists('hasSenhaunica')) {
 
-    function hasUspTheme(bool $humanReadable = false)
+    function hasSenhaunica(bool $humanReadable = false)
     {
-        $package = 'uspdev/laravel-usp-theme';
+        $package = 'uspdev/senhaunica-socialite';
         if(InstalledVersions::isInstalled($package)) {
             return InstalledVersions::getPrettyVersion($package);
         }

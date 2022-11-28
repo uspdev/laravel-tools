@@ -1,27 +1,24 @@
 <?php
 
+use Composer\InstalledVersions;
 use Uspdev\Replicado\Replicado;
 
 /**
- * Verifica se a biblioteca replicado está instalada
+ * Verifica se a biblioteca replicado está instalada e retorna sua versão
  *
- * Todo: verifica a configuração
- *
- * @return boolean
+ * @param Bool $humanReadable Se true, retorna a versão ou 'false'
+ * @return boolean|string
  * @author Masaki K Neto, em 29/11/2021
  */
 if (!function_exists('hasReplicado')) {
 
     function hasReplicado(bool $humanReadable = false)
     {
-        // versão 2 possui a classe replicado
-        if (\class_exists('Uspdev\\Replicado\\Replicado')) {
-            // if (DB::test()) {
-                return 'v2';
-            // }
-        }
-        if (\class_exists('Uspdev\\Replicado\\DB')) {
-            return $humanReadable ? 'true' : true;
+        $package = 'uspdev/replicado';
+        if (InstalledVersions::isInstalled($package)) {
+            $ret = InstalledVersions::getPrettyVersion($package);
+            $ret .= ' (' . substr(InstalledVersions::getReference($package), 0, 7) . ')';
+            return $humanReadable ? $ret : true;
         }
         return $humanReadable ? 'false' : false;
     }
