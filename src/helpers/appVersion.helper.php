@@ -1,50 +1,27 @@
 <?php
+
+use Composer\InstalledVersions;
 /**
- * Recupera dados da versão da aplicação a partir do git
+ * Recupera dados da versão do pacote (package) instalado via composer
  *
- * $params = ['completo' => false]
- *
- * @param Array $params
- * @return String|Null
+ * @param String $package nome do pacote no formato 'vendor/nome-do-pacote'
+ * @return String|Bool
  * @author Masaki K Neto, em 11/04/2022
  */
 if (!function_exists('appVersion')) {
-    function appVersion($params = ['completo' => false, 'gitPath' => null])
+    function appVersion($package = null)
     {
-
-        $gitBasePath = $params['gitPath'] ?? base_path() . '/.git'; // e.g in laravel: base_path().'/.git';
-
-        if (!file_exists($gitBasePath. '/HEAD')) {
-            // gerar log em arquivo aqui
-
-            if (config('laravel-tools.debug')) {
-                return 'não é repositório git ' . realpath($gitBasePath);
-            } else {
-                return null;
-            }
+        if ($package && InstalledVersions::isInstalled($package)) {
+            $ret = InstalledVersions::getPrettyVersion($package);
+            $ret .= ' (' . substr(InstalledVersions::getReference($package), 0, 7) . ')';
+            return $ret;
         }
 
-        $gitStr = file_get_contents($gitBasePath . '/HEAD');
-        $gitBranchName = rtrim(preg_replace("/(.*?\/){2}/", '', $gitStr));
-        $gitPathBranch = $gitBasePath . '/refs/heads/' . $gitBranchName;
-        $gitHash = substr(file_get_contents($gitPathBranch),0,7);
-        // $gitDate = date(DATE_ATOM, filemtime($gitPathBranch));
-        $gitDate = date('d/m/Y', filemtime($gitPathBranch));
-
-        $HEAD_hash = file_get_contents('../.git/refs/heads/master'); // or branch x
-
-        $return = "version date: " . $gitDate . "<br>branch: " . $gitBranchName . "<br> commit: " . $gitHash;
-
-        $files = glob($gitBasePath . '/tags/*');
-        foreach (array_reverse($files) as $file) {
-            $contents = trim(file_get_contents($file));
-
-            if ($HEAD_hash === $contents) {
-                $return .= "\n" . 'Current tag is ' . basename($file);
-            }
+        if ($package == null) {
+            $self = InstalledVersions::getRootPackage();
+            return $self['pretty_version'] . ' (' . substr($self['reference'], 0, 7) . ')';
         }
 
-        return $return;
-
+        return false;
     }
 }

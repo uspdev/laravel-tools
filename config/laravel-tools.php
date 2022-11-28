@@ -9,4 +9,13 @@ return [
 
     # Ativa mensagens de debug
     'debug' => env('LARAVEL_TOOLS_DEBUG', config('app.debug')),
+
+    # Rota painel informativo - dashboard
+    'dashboardRoutes' => 'dashboard',
+
+    # prefix pra as rotas
+    'prefix' => 'laravel-tools',
+
+    // template a ser estendido. Deve possuir a section "content"
+    'template' => 'laravel-usp-theme::master',
 ];
