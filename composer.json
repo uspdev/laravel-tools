@@ -10,7 +10,8 @@
     }
   ],
   "require": {
-    "php": "^7.3"
+    "php": "^7.3",
+    "rap2hpoutre/laravel-log-viewer": "^2.2"
   },
   "autoload": {
     "psr-4": {
