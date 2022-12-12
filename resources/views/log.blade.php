@@ -4,13 +4,13 @@
   @parent
   <style>
     /* body {
-              padding: 25px;
-            } */
+                padding: 25px;
+              } */
 
-    h1 {
+    /* h1 {
       font-size: 1.5em;
       margin-top: 0;
-    }
+    } */
 
     #table-log {
       font-size: 0.85rem;
@@ -68,9 +68,9 @@
 
 
     /**
-            * DARK MODE CSS
-            */
-
+              * DARK MODE CSS
+              */
+/*
     body[data-theme="dark"] {
       background-color: #151515;
       color: #cccccc;
@@ -141,38 +141,37 @@
       color: #bfbfbf;
       background-color: #212121;
       border-color: #4a4a4a;
-    }
+    } */
   </style>
 @endsection
 
 @section('content')
-
   @include('laravel-tools::partials.dashboard-menu', ['activeTab' => 'logs'])
 
   <script>
-    function initTheme() {
-      const darkThemeSelected =
-        localStorage.getItem('darkSwitch') !== null &&
-        localStorage.getItem('darkSwitch') === 'dark';
-      darkSwitch.checked = darkThemeSelected;
-      darkThemeSelected ? document.body.setAttribute('data-theme', 'dark') :
-        document.body.removeAttribute('data-theme');
-    }
+    // function initTheme() {
+    //   const darkThemeSelected =
+    //     localStorage.getItem('darkSwitch') !== null &&
+    //     localStorage.getItem('darkSwitch') === 'dark';
+    //   darkSwitch.checked = darkThemeSelected;
+    //   darkThemeSelected ? document.body.setAttribute('data-theme', 'dark') :
+    //     document.body.removeAttribute('data-theme');
+    // }
 
-    function resetTheme() {
-      if (darkSwitch.checked) {
-        document.body.setAttribute('data-theme', 'dark');
-        localStorage.setItem('darkSwitch', 'dark');
-      } else {
-        document.body.removeAttribute('data-theme');
-        localStorage.removeItem('darkSwitch');
-      }
-    }
+    // function resetTheme() {
+    //   if (darkSwitch.checked) {
+    //     document.body.setAttribute('data-theme', 'dark');
+    //     localStorage.setItem('darkSwitch', 'dark');
+    //   } else {
+    //     document.body.removeAttribute('data-theme');
+    //     localStorage.removeItem('darkSwitch');
+    //   }
+    // }
   </script>
 
   <div class="row">
     <div class="col sidebar mb-3">
-      <h1><i class="fa fa-calendar" aria-hidden="true"></i> Laravel Log Viewer</h1>
+      <h5><i class="fa fa-calendar" aria-hidden="true"></i> Laravel Log Viewer</h5>
       <p class="text-muted"><i>by Rap2h</i></p>
 
       {{-- <div class="custom-control custom-switch" style="padding-bottom:20px;">
@@ -184,9 +183,7 @@
     </div>
     <div class="col-10 table-container">
       @if ($logs === null)
-        <div>
-          Log file >50M, please download it.
-        </div>
+        <div>Log file >50M, please download it.</div>
       @else
         @includeWhen($current_file, 'laravel-tools::logs.arquivo')
       @endif
@@ -199,21 +196,21 @@
   @section('javascripts_bottom')
     @parent
     <script>
-      // dark mode by https://github.com/coliff/dark-mode-switch
-      const darkSwitch = document.getElementById('darkSwitch');
+      //   // dark mode by https://github.com/coliff/dark-mode-switch
+      //   const darkSwitch = document.getElementById('darkSwitch');
 
-      // this is here so we can get the body dark mode before the page displays
-      // otherwise the page will be white for a second...
-      initTheme();
+      //   // this is here so we can get the body dark mode before the page displays
+      //   // otherwise the page will be white for a second...
+      //   initTheme();
 
-      window.addEventListener('load', () => {
-        if (darkSwitch) {
-          initTheme();
-          darkSwitch.addEventListener('change', () => {
-            resetTheme();
-          });
-        }
-      });
+      //   window.addEventListener('load', () => {
+      //     if (darkSwitch) {
+      //       initTheme();
+      //       darkSwitch.addEventListener('change', () => {
+      //         resetTheme();
+      //       });
+      //     }
+      //   });
 
       // end darkmode js
     </script>
