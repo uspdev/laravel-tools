@@ -27,7 +27,7 @@ class AppServiceProvider extends ServiceProvider
             $this->configForcarHttps();
         }
 
-        if (config('laravel-tools.dashboardRoutes')) {
+        if (config('laravel-tools.prefix')) {
             $this->loadViewsFrom(__DIR__ . '/../resources/views', 'laravel-tools');
             $this->registerRoutes();
         }
@@ -53,8 +53,14 @@ class AppServiceProvider extends ServiceProvider
 
     protected function registerRoutes()
     {
-        Route::group(['prefix' => config('laravel-tools.prefix'), 'middleware' => 'web'], function () {
-            $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
-        });
+        Route::group(
+            [
+                'prefix' => config('laravel-tools.prefix'),
+                // 'middleware' => 'web',
+                'middleware' => ['web', 'can:admin'],
+            ],
+            function () {
+                $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
+            });
     }
 }

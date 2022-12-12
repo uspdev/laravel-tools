@@ -17,16 +17,18 @@ class EventServiceProvider extends ServiceProvider
     {
         parent::boot();
 
-        Event::listen(function (UspThemeParseKey $event) {
-            if (isset($event->item['key']) && $event->item['key'] == 'laravel-tools') {
-                $event->item = [
-                    'text' => '<i class="fas fa-toolbox text-danger"></i>',
-                    'url' => route('laravel-tools.dashboard'),
-                    'title' => 'Laravel tools Dashboard',
-                    'can' => 'admin',
-                ];
-            }
-            return $event->item;
-        });
+        if (config('laravel-tools.prefix')) {
+            Event::listen(function (UspThemeParseKey $event) {
+                if (isset($event->item['key']) && $event->item['key'] == 'laravel-tools') {
+                    $event->item = [
+                        'text' => '<i class="fas fa-toolbox text-danger"></i>',
+                        'url' => route('laravel-tools.app'),
+                        'title' => 'Laravel tools Dashboard',
+                        'can' => 'admin',
+                    ];
+                }
+                return $event->item;
+            });
+        }
     }
 }

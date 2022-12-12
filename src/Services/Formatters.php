@@ -2,6 +2,8 @@
 
 namespace Uspdev\LaravelTools\Services;
 
+use Illuminate\Support\Facades\DB;
+
 class Formatters
 {
     public static function AppVersion($app)
@@ -10,6 +12,20 @@ class Formatters
             return '<a href="https://github.com/' . $app . '" target="github">' . $appVersion . '</a>';
         }
         return 'não instalado';
+    }
+
+    public static function dbVersion()
+    {
+        if (config('database.default') == 'mysql') {
+            $results = DB::select(DB::raw('SELECT version() as version'));
+            return $results[0]->version;
+        }
+        if (config('database.default') == 'sqlserver') {
+            $results = DB::select(DB::raw('SELECT @@version as version'));
+            return $results[0]->version;
+        }
+        // outro sgbd ???
+        return null;
     }
 
     public static function config($key, $val)
@@ -22,7 +38,17 @@ class Formatters
             return $val ? 'true' : 'false';
         }
         if (is_array($val)) {
-            return json_encode($val, JSON_UNESCAPED_UNICODE);
+            if (count(array_filter(array_keys($val), 'is_string')) > 0) {
+                // array associativo
+                return json_encode($val, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+            } else {
+                $ret = '';
+                foreach ($val as $k => $v) {
+                    $ret .= is_array($v) ? json_encode($v, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) : $v;
+                    $ret .= ', ';
+                }
+                return substr($ret, 0, -2);
+            }
         }
         return $val;
     }

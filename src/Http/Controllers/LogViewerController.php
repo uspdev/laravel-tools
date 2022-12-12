@@ -2,10 +2,12 @@
 
 namespace Uspdev\LaravelTools\Http\Controllers;
 
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Rap2hpoutre\LaravelLogViewer\LogViewerController as BaseController;
 
 class LogViewerController extends BaseController
 {
+    use AuthorizesRequests;
 
     public function __construct()
     {
