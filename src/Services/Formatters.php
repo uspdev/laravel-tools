@@ -16,7 +16,7 @@ class Formatters
 
     public static function dbVersion()
     {
-        if (config('database.default') == 'mysql') {
+        if (config('database.default') == 'mysql' || config('database.default') == 'mariadb') {
             $results = DB::select(DB::raw('SELECT version() as version'));
             return $results[0]->version;
         }
