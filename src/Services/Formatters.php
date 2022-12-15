@@ -40,11 +40,11 @@ class Formatters
         if (is_array($val)) {
             if (count(array_filter(array_keys($val), 'is_string')) > 0) {
                 // array associativo
-                return json_encode($val, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+                return json_encode($val, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
             } else {
                 $ret = '';
                 foreach ($val as $k => $v) {
-                    $ret .= is_array($v) ? json_encode($v, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) : $v;
+                    $ret .= is_array($v) ? json_encode($v, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) : $v;
                     $ret .= ', ';
                 }
                 return substr($ret, 0, -2);
