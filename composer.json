@@ -11,7 +11,8 @@
   ],
   "require": {
     "php": "^7.3",
-    "rap2hpoutre/laravel-log-viewer": "^2.2"
+    "rap2hpoutre/laravel-log-viewer": "^2.2",
+    "ybr-nx/laravel-mariadb": "^1.0"
   },
   "autoload": {
     "psr-4": {
