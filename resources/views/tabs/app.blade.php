@@ -61,10 +61,10 @@
   @endif
 </div>
 
-@include('laravel-usp-theme::blocos.datatable-simples-paginado')
+@include('laravel-usp-theme::blocos.datatable-simples')
 <div>
   <div class="h5">Composer</div>
-  <table class="table table-sm table-hover datatable-simples-paginado">
+  <table class="table table-sm table-hover datatable-simples dt-paging-10">
     <thead>
       <tr>
         <th>Nome</th>
