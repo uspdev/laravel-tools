@@ -17,11 +17,11 @@ class Formatters
     public static function dbVersion()
     {
         if (config('database.default') == 'mysql' || config('database.default') == 'mariadb') {
-            $results = DB::select(DB::raw('SELECT version() as version'));
+            $results = DB::select('SELECT version() as version');
             return $results[0]->version;
         }
         if (config('database.default') == 'sqlserver') {
-            $results = DB::select(DB::raw('SELECT @@version as version'));
+            $results = DB::select('SELECT @@version as version');
             return $results[0]->version;
         }
         // outro sgbd ???
