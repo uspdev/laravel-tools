@@ -12,6 +12,7 @@
   "require": {
     "php": "^7.3|^8.0",
     "rap2hpoutre/laravel-log-viewer": "^2.2",
+    "spatie/db-dumper": "^3.7",
     "ybr-nx/laravel-mariadb": "^1.0"
   },
   "autoload": {
