@@ -122,6 +122,7 @@ class MainController extends Controller
     public static function loadBackup(Request $request)
     {
         $name = $request->input('name');
+        $name = Str::before($name, '.');
 
         if (!defined('STDIN')) { // Solução para o Error Undefined constant "STDIN" 
             define('STDIN', fopen('php://stdin', 'r')); // https://stackoverflow.com/questions/21184962/use-of-undefined-constant-stdin-assumed-stdin-in-c-wamp-www-study-sayhello
