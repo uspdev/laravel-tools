@@ -95,7 +95,7 @@ class MainController extends Controller
     public static function createBackup()
     {
         Artisan::call('snapshot:create');
-        return redirect(env('APP_URL') . '/laravel-tools/backup?tab=backup');
+        return redirect(config('app.url') . '/laravel-tools/backup?tab=backup');
     }
 
     /**
@@ -110,7 +110,7 @@ class MainController extends Controller
         }
 
         Artisan::call('snapshot:load ' . $name);
-        return redirect(env('APP_URL') . '/laravel-tools/backup?tab=backup');
+        return redirect(config('app.url') . '/laravel-tools/backup?tab=backup');
     }
 
     /**
@@ -147,9 +147,9 @@ class MainController extends Controller
     public function downloadBackup(Request $request)
     {
         $name = $request->input('name');
-        $nomeServidor = Str::after(env('APP_URL'), 'https://');
+        $nomeServidor = Str::after(config('app.url'), 'https://');
         $nomeServidor = Str::before($nomeServidor, '/');
-        $nomeArquivo = Str::lower(env('APP_NAME')) . '_at_' . $nomeServidor . '_' . $name . '.sql.gz';
+        $nomeArquivo = Str::lower(config('app.name')) . '_at_' . $nomeServidor . '_' . $name . '.sql.gz';
         return response()->download(base_path("database/snapshots/" . $name . '.sql.gz'), $nomeArquivo);
     }
 
@@ -166,7 +166,7 @@ class MainController extends Controller
         $caminho = base_path('database/snapshots/');
 
         $arquivo->move($caminho, str_replace(' ', '_', $arquivo->getClientOriginalName()));
-        return redirect(env('APP_URL') . '/laravel-tools/backup?tab=backup');
+        return redirect(config('app.url') . '/laravel-tools/backup?tab=backup');
     }
 
     /**
@@ -177,6 +177,6 @@ class MainController extends Controller
         $name = $request->input('name');
         Artisan::call('snapshot:delete ' . $name);
 
-        return redirect(env('APP_URL') . '/laravel-tools/backup?tab=backup');
+        return redirect(config('app.url') . '/laravel-tools/backup?tab=backup');
     }
 }
