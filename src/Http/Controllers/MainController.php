@@ -95,7 +95,7 @@ class MainController extends Controller
     public static function createBackup()
     {
         Artisan::call('snapshot:create');
-        return redirect(config('app.url') . '/laravel-tools/backup?tab=backup');
+        return redirect(route('laravel-tools.backup', ['tab' => 'backup']));
     }
 
     /**
@@ -110,7 +110,7 @@ class MainController extends Controller
         }
 
         Artisan::call('snapshot:load ' . $name);
-        return redirect(config('app.url') . '/laravel-tools/backup?tab=backup');
+        return redirect(route('laravel-tools.backup', ['tab' => 'backup']));
     }
 
     /**
@@ -166,7 +166,7 @@ class MainController extends Controller
         $caminho = base_path('database/snapshots/');
 
         $arquivo->move($caminho, str_replace(' ', '_', $arquivo->getClientOriginalName()));
-        return redirect(config('app.url') . '/laravel-tools/backup?tab=backup');
+        return redirect(route('laravel-tools.backup', ['tab' => 'backup']));
     }
 
     /**
@@ -177,6 +177,6 @@ class MainController extends Controller
         $name = $request->input('name');
         Artisan::call('snapshot:delete ' . $name);
 
-        return redirect(config('app.url') . '/laravel-tools/backup?tab=backup');
+        return redirect(route('laravel-tools.backup', ['tab' => 'backup']));
     }
 }
