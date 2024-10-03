@@ -9,7 +9,8 @@ use Uspdev\LaravelTools\Services\Formatters;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Str;
-use Symfony\Component\Console\Output\BufferedOutput;
+use Illuminate\Support\Facades\Storage;
+use DateTime;
 
 class MainController extends Controller
 {
@@ -77,14 +78,31 @@ class MainController extends Controller
         ]);
         $vars['activeTab'] = $request->tab ?: 'app';
 
-        $output = new BufferedOutput();
-        Artisan::call('snapshot:list', array(), $output);
-        $resultado = $output->fetch();
+        
+        $files = Storage::allFiles('snapshots');
+        $backupsList = [];
 
-        $dadosFormatados = Self::processarResultado($resultado);
+        foreach($files as $file){
+            $name = Str::after($file, 'snapshots/');
+            $time = Storage::lastModified('snapshots/'.$name);
+            $size = Storage::size('snapshots/'.$name);
 
-        $vars['resultado'] = $dadosFormatados;
+            $size = number_format($size / 1024, 2) . ' KB';
+            $lastModified = (new DateTime())->setTimestamp($time)->format('Y-m-d H:i:s');
 
+            $backupsList[] = [
+                'name' => $name,
+                'last_modified' => $lastModified,
+                'size' => $size,
+                'timestamp' => $time, 
+            ];
+        }
+
+        usort($backupsList, function ($a, $b) {
+            return $b['timestamp'] <=> $a['timestamp'];
+        });
+
+        $vars['resultado'] = $backupsList;
 
         return view('laravel-tools::dashboard', $vars);
     }
@@ -114,34 +132,6 @@ class MainController extends Controller
     }
 
     /**
-     * Processa o texto do resultado da lista de backups para exibição na tela
-     */
-    public static function processarResultado($resultado)
-    {
-        $linhas = explode("\n", trim($resultado));
-        $dados = [];
-
-        foreach (array_slice($linhas, 2, -1) as $linha) {
-            $linha = trim($linha);
-            if (empty($linha)) {
-                continue;
-            }
-
-            preg_match('/\| (.+?) \| (.+?) \| (.+?) \|/', $linha, $matches);
-
-            if (count($matches) === 4) {
-                $dados[] = [
-                    'name' => trim($matches[1]),
-                    'created_at' => trim($matches[2]),
-                    'size' => trim($matches[3]),
-                ];
-            }
-        }
-
-        return $dados;
-    }
-
-    /**
      * Faz o download do arquivo do backup passado via request para a máquina do usuário
      */
     public function downloadBackup(Request $request)
@@ -149,8 +139,8 @@ class MainController extends Controller
         $name = $request->input('name');
         $nomeServidor = Str::after(config('app.url'), 'https://');
         $nomeServidor = Str::before($nomeServidor, '/');
-        $nomeArquivo = Str::lower(config('app.name')) . '_at_' . $nomeServidor . '_' . $name . '.sql.gz';
-        return response()->download(base_path("database/snapshots/" . $name . '.sql.gz'), $nomeArquivo);
+        $nomeArquivo = Str::lower(config('app.name')) . '_at_' . $nomeServidor . '_' . $name ;
+        return response()->download(storage_path("app/snapshots/" . $name ), $nomeArquivo);
     }
 
     /**

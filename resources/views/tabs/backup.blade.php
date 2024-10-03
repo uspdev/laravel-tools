@@ -28,7 +28,7 @@
   <thead>
     <tr>
       <th>Nome</th>
-      <th>Data de criação</th>
+      <th>Última modificação</th>
       <th>Tamanho</th>
       <th>Carregar</th>
       <th>Download</th>
@@ -42,7 +42,7 @@
       @endphp
       <tr>
         <td>{{ $item['name'] }}</td>
-        <td>{{ $item['created_at'] }} GMT</td>
+        <td>{{ $item['last_modified'] }} GMT</td>
         <td>{{ $item['size'] }}</td>
         <td>
           <button type="button" class="btn bg-warning" data-toggle="modal" data-target="#modal{{ $itemName }}">
