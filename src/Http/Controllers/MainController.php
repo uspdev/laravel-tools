@@ -10,6 +10,8 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
+
 use DateTime;
 
 class MainController extends Controller
@@ -72,6 +74,7 @@ class MainController extends Controller
      */
     public static function backup(Request $request)
     {
+        // dd(config('filesystems.disks.snapshots.root'));
         $request->validate([
             'tab' => 'nullable|string',
             'file' => 'nullable|string',
@@ -79,13 +82,15 @@ class MainController extends Controller
         $vars['activeTab'] = $request->tab ?: 'app';
 
         
-        $files = Storage::allFiles('snapshots');
+        // $files = Storage::allFiles('app/laravel-db-snapshots');
+        $files = File::files(config('filesystems.disks.snapshots.root'));
+        // dd($files);
         $backupsList = [];
 
         foreach($files as $file){
             $name = Str::after($file, 'snapshots/');
-            $time = Storage::lastModified('snapshots/'.$name);
-            $size = Storage::size('snapshots/'.$name);
+            $time = $file->getMTime();
+            $size = $file->getSize();
 
             $size = number_format($size / 1024, 2) . ' KB';
             $lastModified = (new DateTime())->setTimestamp($time)->format('Y-m-d H:i:s');
@@ -149,7 +154,7 @@ class MainController extends Controller
             $nomeArquivo = $name;
         }
 
-        return response()->download(storage_path("app/snapshots/" . $name ), $nomeArquivo);
+        return response()->download(config('filesystems.disks.snapshots.root') . $name , $nomeArquivo);
     }
 
     /**
@@ -162,7 +167,7 @@ class MainController extends Controller
         ]);
 
         $arquivo = $request->file('backup_file');
-        $caminho = storage_path('app/snapshots/');
+        $caminho = config('filesystems.disks.snapshots.root');
         $nomeArquivo = str_replace(' ', '_', $arquivo->getClientOriginalName());
         $nomeArquivo = str_replace('(', '_', $nomeArquivo);
         $nomeArquivo = str_replace(')', '_', $nomeArquivo);

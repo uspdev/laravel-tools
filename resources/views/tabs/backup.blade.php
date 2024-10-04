@@ -24,15 +24,13 @@
 </div>
 
 
-<table class='mt-1'>
+<table class='mt-1 table table-sm'>
   <thead>
     <tr>
       <th>Nome</th>
       <th>Última modificação</th>
       <th>Tamanho</th>
-      <th>Carregar</th>
-      <th>Download</th>
-      <th>Apagar</th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
@@ -44,8 +42,8 @@
         <td>{{ $item['name'] }}</td>
         <td>{{ $item['last_modified'] }} GMT</td>
         <td>{{ $item['size'] }}</td>
-        <td>
-          <button type="button" class="btn bg-warning" data-toggle="modal" data-target="#modal{{ $itemName }}">
+        <td class="d-flex">
+          <button type="button" class="btn bg-warning m-1 btn-sm d-inline" data-toggle="modal" data-target="#modal{{ $itemName }}">
             Restaurar
           </button>
           <div class="modal fade" id="modal{{ $itemName }}" tabindex="-1" role="dialog"
@@ -82,21 +80,19 @@
               </div>
             </div>
           </div>
-        </td>
-        <td>
+        
           <form action="{{ route('laravel-tools.downloadBackup') }}" method="GET">
             @csrf
             <input type="hidden" name="name" value="{{ $item['name'] }}">
-            <button type="submit" class="btn btn-secondary m-1"><i class ='fa fa-download'></i>
+            <button type="submit" class="btn btn-secondary m-1 btn-sm d-inline"><i class ='fa fa-download'></i>
               Download</button>
           </form>
-        </td>
-        <td>
+        
           <form action="{{ route('laravel-tools.deleteBackup') }}" method="POST"
             onsubmit="return confirm(&#39;Tem certeza que deseja apagar {{ $item['name'] }}?&#39;);">
             @csrf
             <input type="hidden" name="name" value="{{ $item['name'] }}">
-            <button type="submit" class="btn bg-danger text-white"><i class ='fa fa-trash'></i>
+            <button type="submit" class="btn bg-danger text-white m-1 btn-sm d-inline"><i class ='fa fa-trash'></i>
               Apagar</button>
           </form>
         </td>
