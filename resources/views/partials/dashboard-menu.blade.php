@@ -13,5 +13,8 @@
   <li class="nav-item">
     <a class="nav-link {{ $activeTab == 'users' ? 'active' : '' }}" href="{{ route(config('senhaunica.userRoutes') . '.index') }}">Users</a>
   </li>
+  <li class="nav-item">
+    <a class="nav-link {{ $activeTab == 'backup' ? 'active' : '' }}" href="{{ route('laravel-tools.backup') }}?tab=backup">Backup</a>
+  </li>
 </ul>
 <br>

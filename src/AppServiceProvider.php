@@ -12,6 +12,8 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/laravel-tools.php', 'laravel-tools');
 
+        $this->mergeConfigFrom(__DIR__ . '/../config/filesystems.php', 'filesystems.disks');
+
         // registra eventos
         $this->app->register(EventServiceProvider::class);
     }
