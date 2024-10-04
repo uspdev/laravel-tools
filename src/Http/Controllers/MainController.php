@@ -74,7 +74,6 @@ class MainController extends Controller
      */
     public static function backup(Request $request)
     {
-        // dd(config('filesystems.disks.snapshots.root'));
         $request->validate([
             'tab' => 'nullable|string',
             'file' => 'nullable|string',
@@ -82,9 +81,7 @@ class MainController extends Controller
         $vars['activeTab'] = $request->tab ?: 'app';
 
         
-        // $files = Storage::allFiles('app/laravel-db-snapshots');
         $files = File::files(config('filesystems.disks.snapshots.root'));
-        // dd($files);
         $backupsList = [];
 
         foreach($files as $file){
