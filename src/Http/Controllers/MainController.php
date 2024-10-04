@@ -122,7 +122,7 @@ class MainController extends Controller
     public static function loadBackup(Request $request)
     {
         $name = $request->input('name');
-        $name = Str::before($name, '.');
+        $name = Str::before($name, '.sql.gz');
 
         if (!defined('STDIN')) { // Solução para o Error Undefined constant "STDIN" 
             define('STDIN', fopen('php://stdin', 'r')); // https://stackoverflow.com/questions/21184962/use-of-undefined-constant-stdin-assumed-stdin-in-c-wamp-www-study-sayhello
@@ -140,7 +140,15 @@ class MainController extends Controller
         $name = $request->input('name');
         $nomeServidor = Str::after(config('app.url'), 'https://');
         $nomeServidor = Str::before($nomeServidor, '/');
-        $nomeArquivo = Str::lower(config('app.name')) . '_at_' . $nomeServidor . '_' . $name ;
+
+        $appServer = Str::lower(config('app.name')) . '_at_' . $nomeServidor . '_';
+
+        if (!Str::startsWith($name, $appServer)) {
+            $nomeArquivo = $appServer . $name;
+        } else {
+            $nomeArquivo = $name;
+        }
+
         return response()->download(storage_path("app/snapshots/" . $name ), $nomeArquivo);
     }
 
@@ -154,9 +162,12 @@ class MainController extends Controller
         ]);
 
         $arquivo = $request->file('backup_file');
-        $caminho = base_path('database/snapshots/');
+        $caminho = storage_path('app/snapshots/');
+        $nomeArquivo = str_replace(' ', '_', $arquivo->getClientOriginalName());
+        $nomeArquivo = str_replace('(', '_', $nomeArquivo);
+        $nomeArquivo = str_replace(')', '_', $nomeArquivo);
 
-        $arquivo->move($caminho, str_replace(' ', '_', $arquivo->getClientOriginalName()));
+        $arquivo->move($caminho, $nomeArquivo);
         return redirect(route('laravel-tools.backup', ['tab' => 'backup']));
     }
 
@@ -166,6 +177,8 @@ class MainController extends Controller
     public static function deleteBackup(Request $request)
     {
         $name = $request->input('name');
+        $name = Str::before($name, '.sql.gz');
+
         Artisan::call('snapshot:delete ' . $name);
 
         return redirect(route('laravel-tools.backup', ['tab' => 'backup']));
