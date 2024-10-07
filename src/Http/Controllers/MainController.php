@@ -84,7 +84,7 @@ class MainController extends Controller
         $backupsList = [];
 
         foreach($files as $file){
-            $name = Str::after($file, 'snapshots/');
+            $name = basename($file);
             $time = $file->getMTime();
             $size = $file->getSize();
 
@@ -115,6 +115,7 @@ class MainController extends Controller
     public static function createBackup()
     {
         Artisan::call('snapshot:create');
+        session()->flash('success', 'Backup criado com sucesso');
         return redirect(route('laravel-tools.backup', ['tab' => 'backup']));
     }
 
@@ -131,9 +132,9 @@ class MainController extends Controller
         if (in_array($extension, $compressionExtensions)) {
             $fileWithoutCompression = substr($file, 0, strrpos($file, '.' . $extension));
             $extension = pathinfo($fileWithoutCompression, PATHINFO_EXTENSION);
-            $name = Str::after($fileWithoutCompression, 'snapshots/');
+            $name = basename($file);
         } else {
-            $name = Str::after($file, 'snapshots/');
+            $name = basename($file);
         }
 
         $name = Str::before($name, '.'.$extension);
@@ -143,6 +144,7 @@ class MainController extends Controller
         }
 
         Artisan::call('snapshot:load ' . $name);
+        session()->flash('success', 'Backup restaurado com sucesso');
         return redirect(route('laravel-tools.backup', ['tab' => 'backup']));
     }
 
@@ -182,6 +184,7 @@ class MainController extends Controller
         $nomeArquivo = str_replace(')', '_', $nomeArquivo);
 
         $arquivo->move($caminho, $nomeArquivo);
+        session()->flash('success', 'Upload do backup efetuado com sucesso');
         return redirect(route('laravel-tools.backup', ['tab' => 'backup']));
     }
 
@@ -191,22 +194,10 @@ class MainController extends Controller
     public static function deleteBackup(Request $request)
     {
         $file = $request->input('file');  
-        $extension = pathinfo($file, PATHINFO_EXTENSION);
+        
+        unlink($file);
 
-        $compressionExtensions = ['gz', 'zip', 'bz2', 'tar'];
-
-        if (in_array($extension, $compressionExtensions)) {
-            $fileWithoutCompression = substr($file, 0, strrpos($file, '.' . $extension));
-            $extension = pathinfo($fileWithoutCompression, PATHINFO_EXTENSION);
-            $name = Str::after($fileWithoutCompression, 'snapshots/');
-        } else {
-            $name = Str::after($file, 'snapshots/');
-        }
-
-        $name = Str::before($name, '.'.$extension);
-
-        Artisan::call('snapshot:delete ' . $name);
-
+        session()->flash('success', 'Backup apagado com sucesso');
         return redirect(route('laravel-tools.backup', ['tab' => 'backup']));
     }
 }

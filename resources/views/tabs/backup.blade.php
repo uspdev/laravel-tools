@@ -6,6 +6,12 @@
   }
 </style>
 
+@if (session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
+
 <h3>Gerenciamento de Backup</h3>
 <div class="d-flex align-items-center">
   <form action="{{ route('laravel-tools.createBackup') }}" method="POST" class="m-2">
