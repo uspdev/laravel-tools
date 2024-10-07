@@ -60,9 +60,9 @@
                 <div class="modal-body">
                   <p>Tem certeza que deseja restaurar {{ $item['name'] }}?</p>
                   <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="checkbox{{ $item['name'] }}"
-                      onchange="activateRestoreButton('{{ $item['name'] }}')">
-                    <label class="form-check-label" for="checkbox{{ $item['name'] }}">
+                    <input class="form-check-input" type="checkbox" id="checkbox{{ $item['file'] }}"
+                      onchange="activateRestoreButton('{{ $item['file'] }}')">
+                    <label class="form-check-label" for="checkbox{{ $item['file'] }}">
                       Confirmar restauração
                     </label>
                   </div>
@@ -70,11 +70,11 @@
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                   <form action="{{ route('laravel-tools.loadBackup') }}" method="POST"
-                    id="restoreForm{{ $item['name'] }}">
+                    id="restoreForm{{ $item['file'] }}">
                     @csrf
-                    <input type="hidden" name="name" value="{{ $item['name'] }}">
-                    <button type="button" class="btn btn-danger" id="restoreButton{{ $item['name'] }}"
-                      onclick="confirmRestore('{{ $item['name'] }}')">Restaurar</button>
+                    <input type="hidden" name="file" value="{{ $item['file'] }}">
+                    <button type="button" class="btn btn-danger" id="restoreButton{{ $item['file'] }}"
+                      onclick="confirmRestore('{{ $item['file'] }}')">Restaurar</button>
                   </form>
                 </div>
               </div>
@@ -91,7 +91,7 @@
           <form action="{{ route('laravel-tools.deleteBackup') }}" method="POST"
             onsubmit="return confirm(&#39;Tem certeza que deseja apagar {{ $item['name'] }}?&#39;);">
             @csrf
-            <input type="hidden" name="name" value="{{ $item['name'] }}">
+            <input type="hidden" name="file" value="{{ $item['file'] }}">
             <button type="submit" class="btn bg-danger text-white m-1 btn-sm d-inline"><i class ='fa fa-trash'></i>
               Apagar</button>
           </form>

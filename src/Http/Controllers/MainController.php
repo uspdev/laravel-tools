@@ -80,7 +80,6 @@ class MainController extends Controller
         ]);
         $vars['activeTab'] = $request->tab ?: 'app';
 
-        
         $files = File::files(config('filesystems.disks.snapshots.root'));
         $backupsList = [];
 
@@ -91,8 +90,9 @@ class MainController extends Controller
 
             $size = number_format($size / 1024, 2) . ' KB';
             $lastModified = (new DateTime())->setTimestamp($time)->format('Y-m-d H:i:s');
-
+            
             $backupsList[] = [
+                'file' => $file,
                 'name' => $name,
                 'last_modified' => $lastModified,
                 'size' => $size,
@@ -123,8 +123,20 @@ class MainController extends Controller
      */
     public static function loadBackup(Request $request)
     {
-        $name = $request->input('name');
-        $name = Str::before($name, '.sql.gz');
+        $file = $request->input('file');  
+        $extension = pathinfo($file, PATHINFO_EXTENSION);
+
+        $compressionExtensions = ['gz', 'zip'];
+
+        if (in_array($extension, $compressionExtensions)) {
+            $fileWithoutCompression = substr($file, 0, strrpos($file, '.' . $extension));
+            $extension = pathinfo($fileWithoutCompression, PATHINFO_EXTENSION);
+            $name = Str::after($fileWithoutCompression, 'snapshots/');
+        } else {
+            $name = Str::after($file, 'snapshots/');
+        }
+
+        $name = Str::before($name, '.'.$extension);
 
         if (!defined('STDIN')) { // Solução para o Error Undefined constant "STDIN" 
             define('STDIN', fopen('php://stdin', 'r')); // https://stackoverflow.com/questions/21184962/use-of-undefined-constant-stdin-assumed-stdin-in-c-wamp-www-study-sayhello
@@ -178,8 +190,20 @@ class MainController extends Controller
      */
     public static function deleteBackup(Request $request)
     {
-        $name = $request->input('name');
-        $name = Str::before($name, '.sql.gz');
+        $file = $request->input('file');  
+        $extension = pathinfo($file, PATHINFO_EXTENSION);
+
+        $compressionExtensions = ['gz', 'zip', 'bz2', 'tar'];
+
+        if (in_array($extension, $compressionExtensions)) {
+            $fileWithoutCompression = substr($file, 0, strrpos($file, '.' . $extension));
+            $extension = pathinfo($fileWithoutCompression, PATHINFO_EXTENSION);
+            $name = Str::after($fileWithoutCompression, 'snapshots/');
+        } else {
+            $name = Str::after($file, 'snapshots/');
+        }
+
+        $name = Str::before($name, '.'.$extension);
 
         Artisan::call('snapshot:delete ' . $name);
 
