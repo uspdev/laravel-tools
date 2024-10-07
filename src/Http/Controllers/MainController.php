@@ -132,10 +132,9 @@ class MainController extends Controller
         if (in_array($extension, $compressionExtensions)) {
             $fileWithoutCompression = substr($file, 0, strrpos($file, '.' . $extension));
             $extension = pathinfo($fileWithoutCompression, PATHINFO_EXTENSION);
-            $name = basename($file);
-        } else {
-            $name = basename($file);
-        }
+        } 
+
+        $name = basename($file);
 
         $name = Str::before($name, '.'.$extension);
 
