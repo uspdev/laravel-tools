@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Uspdev\LaravelTools\Providers\EventServiceProvider;
+use Illuminate\Support\Facades\Config;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,6 +14,9 @@ class AppServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__ . '/../config/laravel-tools.php', 'laravel-tools');
 
         $this->mergeConfigFrom(__DIR__ . '/../config/filesystems.php', 'filesystems.disks');
+
+        $dbSnapshotsConfig = include __DIR__ . '/../config/db-snapshots.php';
+        Config::set('db-snapshots', $dbSnapshotsConfig);
 
         // registra eventos
         $this->app->register(EventServiceProvider::class);

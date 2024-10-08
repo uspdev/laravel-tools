@@ -80,19 +80,19 @@ class MainController extends Controller
         ]);
         $vars['activeTab'] = $request->tab ?: 'app';
 
-        
         $files = File::files(config('filesystems.disks.snapshots.root'));
         $backupsList = [];
 
         foreach($files as $file){
-            $name = Str::after($file, 'snapshots/');
+            $name = basename($file);
             $time = $file->getMTime();
             $size = $file->getSize();
 
             $size = number_format($size / 1024, 2) . ' KB';
             $lastModified = (new DateTime())->setTimestamp($time)->format('Y-m-d H:i:s');
-
+            
             $backupsList[] = [
+                'file' => $file,
                 'name' => $name,
                 'last_modified' => $lastModified,
                 'size' => $size,
@@ -115,6 +115,7 @@ class MainController extends Controller
     public static function createBackup()
     {
         Artisan::call('snapshot:create');
+        session()->flash('success', 'Backup criado com sucesso');
         return redirect(route('laravel-tools.backup', ['tab' => 'backup']));
     }
 
@@ -123,14 +124,26 @@ class MainController extends Controller
      */
     public static function loadBackup(Request $request)
     {
-        $name = $request->input('name');
-        $name = Str::before($name, '.sql.gz');
+        $file = $request->input('file');  
+        $extension = pathinfo($file, PATHINFO_EXTENSION);
+
+        $compressionExtensions = ['gz', 'zip'];
+
+        if (in_array($extension, $compressionExtensions)) {
+            $fileWithoutCompression = substr($file, 0, strrpos($file, '.' . $extension));
+            $extension = pathinfo($fileWithoutCompression, PATHINFO_EXTENSION);
+        } 
+
+        $name = basename($file);
+
+        $name = Str::before($name, '.'.$extension);
 
         if (!defined('STDIN')) { // Solução para o Error Undefined constant "STDIN" 
             define('STDIN', fopen('php://stdin', 'r')); // https://stackoverflow.com/questions/21184962/use-of-undefined-constant-stdin-assumed-stdin-in-c-wamp-www-study-sayhello
         }
 
         Artisan::call('snapshot:load ' . $name);
+        session()->flash('success', 'Backup restaurado com sucesso');
         return redirect(route('laravel-tools.backup', ['tab' => 'backup']));
     }
 
@@ -170,6 +183,7 @@ class MainController extends Controller
         $nomeArquivo = str_replace(')', '_', $nomeArquivo);
 
         $arquivo->move($caminho, $nomeArquivo);
+        session()->flash('success', 'Upload do backup efetuado com sucesso');
         return redirect(route('laravel-tools.backup', ['tab' => 'backup']));
     }
 
@@ -178,11 +192,11 @@ class MainController extends Controller
      */
     public static function deleteBackup(Request $request)
     {
-        $name = $request->input('name');
-        $name = Str::before($name, '.sql.gz');
+        $file = $request->input('file');  
+        
+        unlink($file);
 
-        Artisan::call('snapshot:delete ' . $name);
-
+        session()->flash('success', 'Backup apagado com sucesso');
         return redirect(route('laravel-tools.backup', ['tab' => 'backup']));
     }
 }
