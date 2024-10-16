@@ -24,7 +24,7 @@ class EventServiceProvider extends ServiceProvider
                         'text' => '<i class="fas fa-toolbox text-danger"></i>',
                         'url' => route('laravel-tools.app'),
                         'title' => 'Laravel tools Dashboard',
-                        'can' => 'admin',
+                        'can' => ($event->item['can'] ?? 'admin'),
                     ];
                 }
                 return $event->item;
