@@ -23,9 +23,7 @@ class MainController extends Controller
      */
     public function app(Request $request)
     {
-        if (hasUspTheme()) {
-            \UspTheme::activeUrl(route('laravel-tools.app'));
-        }
+        \UspTheme::activeUrl(route('laravel-tools.app'));
         $request->validate([
             'tab' => 'nullable|string',
             'file' => 'nullable|string',
@@ -51,9 +49,7 @@ class MainController extends Controller
      */
     public function bibliotecas(Request $request)
     {
-        if (hasUspTheme()) {
-            \UspTheme::activeUrl(route('laravel-tools.app'));
-        }
+        \UspTheme::activeUrl(route('laravel-tools.app'));
         $request->validate([
             'tab' => 'nullable|string',
             'file' => 'nullable|string',
@@ -80,9 +76,7 @@ class MainController extends Controller
      */
     public static function backup(Request $request)
     {
-        if (hasUspTheme()) {
-            \UspTheme::activeUrl(route('laravel-tools.app'));
-        }
+        \UspTheme::activeUrl(route('laravel-tools.app'));
         $request->validate([
             'tab' => 'nullable|string',
             'file' => 'nullable|string',

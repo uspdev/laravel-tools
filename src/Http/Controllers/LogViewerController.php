@@ -17,9 +17,7 @@ class LogViewerController extends BaseController
 
     public function index()
     {
-        if (hasUspTheme()) {
-            \UspTheme::activeUrl(route('laravel-tools.app'));
-        }
+        \UspTheme::activeUrl(route('laravel-tools.app'));
         return parent::index();
     }
 }
