@@ -14,4 +14,10 @@ class LogViewerController extends BaseController
         $this->view_log = 'laravel-tools::log';
         parent::__construct();
     }
+
+    public function index()
+    {
+        \UspTheme::activeUrl(route('laravel-tools.app'));
+        return parent::index();
+    }
 }
