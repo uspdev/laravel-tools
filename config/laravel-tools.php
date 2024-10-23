@@ -15,4 +15,9 @@ return [
 
     // template a ser estendido. Deve possuir a section "content"
     'template' => 'laravel-usp-theme::master',
+
+    // as variáveis do $_SERVER não ficam disponíveis em desenvolvimento, pois o php artisan serve não lê o .htaccess, somente o apache o faz
+    // então as definimos aqui, para não dar erro no Laravel tools Dashboard em desenvolvimento
+    'gatewayInterface' => isset($_SERVER['GATEWAY_INTERFACE']) ? $_SERVER['GATEWAY_INTERFACE'] : '',
+    'serverSoftware' => isset($_SERVER['SERVER_SOFTWARE']) ? $_SERVER['SERVER_SOFTWARE'] : '',
 ];
