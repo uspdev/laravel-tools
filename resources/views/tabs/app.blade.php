@@ -13,9 +13,9 @@
     <li>Config está em cache: <b>{{ app()->configurationIsCached() ? 'true' : 'false' }}</b></li>
     <li>Route está em cache: <b>{{ app()->routesAreCached() ? 'true' : 'false' }}</b></li>
     <li>Versão PHP: <b>{{ phpversion() }}</b></li>
-    <li>Gateway interface: <b>{{ $_SERVER['GATEWAY_INTERFACE'] }}</b></li>
+    <li>Gateway interface: <b>{{ config('laravel-tools.gatewayInterface') }}</b></li>
     <li>Extensões PHP: <b>{{ implode(', ', get_loaded_extensions()) }}</b></li>
-    <li>Versão Servidor: <b>{{ $_SERVER['SERVER_SOFTWARE'] }}</b></li>
+    <li>Versão Servidor: <b>{{ config('laravel-tools.serverSoftware') }}</b></li>
   </ul>
 </div>
 
