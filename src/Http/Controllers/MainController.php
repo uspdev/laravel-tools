@@ -79,6 +79,10 @@ class MainController extends Controller
             'file' => 'nullable|string',
         ]);
         $vars['activeTab'] = $request->tab ?: 'app';
+        
+        if(!is_dir(storage_path("app/laravel-db-snapshots"))){
+            mkdir(storage_path("app/laravel-db-snapshots"),0755);
+        }
 
         $files = File::files(config('filesystems.disks.snapshots.root'));
         $backupsList = [];
