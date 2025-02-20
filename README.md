@@ -33,3 +33,13 @@ Exemplo de configuração e uso.
 
 ```
 
+### Menu na aplicação
+
+No config/laravel-usp-theme.php, coloque ou reposicione a chave laravel-tools para mostrar o menu. Ele será visível somente para admin.
+
+```
+[
+    'key' => 'laravel-tools',
+],
+
+```
