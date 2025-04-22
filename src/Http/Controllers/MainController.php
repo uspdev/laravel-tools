@@ -149,7 +149,7 @@ class MainController extends Controller
             define('STDIN', fopen('php://stdin', 'r')); // https://stackoverflow.com/questions/21184962/use-of-undefined-constant-stdin-assumed-stdin-in-c-wamp-www-study-sayhello
         }
 
-        Artisan::call('snapshot:load ' . $name);
+        Artisan::call('snapshot:load', ['name' => $name, '--force' => true]);
         session()->flash('success', 'Backup restaurado com sucesso');
         return redirect(route('laravel-tools.backup', ['tab' => 'backup']));
     }
