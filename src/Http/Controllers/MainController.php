@@ -9,7 +9,7 @@ use Uspdev\LaravelTools\Services\Formatters;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 
 use DateTime;
@@ -150,8 +150,9 @@ class MainController extends Controller
         }
 
         Artisan::call('snapshot:load', ['name' => $name, '--force' => true]);
+        Auth::logout();
         session()->flash('success', 'Backup restaurado com sucesso');
-        return redirect(route('laravel-tools.backup', ['tab' => 'backup']));
+        return redirect('/');
     }
 
     /**
