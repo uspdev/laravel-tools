@@ -60,3 +60,7 @@ No config/laravel-usp-theme.php, coloque ou reposicione a chave laravel-tools pa
 
 * release 1.5.0
 * novo helper md2html()
+
+#### 16/03/2026
+* release 1.6.0
+* Remoção da dependência `ybr-nx/laravel-mariadb` por incompatibilidade com Laravel 12.
