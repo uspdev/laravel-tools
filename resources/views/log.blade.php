@@ -172,7 +172,6 @@
   <div class="row">
     <div class="col sidebar mb-3">
       <h5><i class="fa fa-calendar" aria-hidden="true"></i> Laravel Log Viewer</h5>
-      <p class="text-muted"><i>by Rap2h</i></p>
 
       {{-- <div class="custom-control custom-switch" style="padding-bottom:20px;">
         <input type="checkbox" class="custom-control-input" id="darkSwitch">
